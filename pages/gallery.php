@@ -19,6 +19,7 @@ function get_image($db) {
 
         while ($i < count($obj)){
             echo '<img src="' . $obj[$i]->data . '" />';
+            echo '<a href="comments.php?id=' . $obj[$i]->id . '">Commenter</a>';
             $i++;
         }
         return (1);
@@ -27,6 +28,16 @@ function get_image($db) {
     get_image($db);
 
     ?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta content="Gallery" name="title">
+<link rel="stylesheet" type="text/css" href=""> <!-- Faire le CSS et include la stylesheet -->
+<title>Gallery</title>
 
+<body>
+</body>
+</html>
 
 
