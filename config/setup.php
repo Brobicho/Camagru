@@ -54,9 +54,21 @@ function create_comments_table($db)
     }
 }
 
+function create_likes_table($db) {
+    try {
+        $sql = "CREATE TABLE `camagru_db`.`likes` ( `id` INT NOT NULL AUTO_INCREMENT , `owner` INT NOT NULL , `image` INT NOT NULL , `date` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB";
+        $db->query($sql);
+    }
+    catch(PDOException $e) {
+        echo "Error: " . $e . PHP_EOL;
+        exit;
+    }
+}
+
 session_start();
 create_users_table($db);
 create_gallery_table($db);
 create_comments_table($db);
+create_likes_table($db);
 
 ?>

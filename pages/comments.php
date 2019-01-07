@@ -53,6 +53,10 @@ function is_clean($content) {
     return (0);
 }
 
+function is_liked($image) {
+   // $sql = "SELECT ";
+}
+
 if (isset($_GET['id'])) {
     $img_id = $_GET['id'];
     display_image($db, $img_id);
@@ -67,16 +71,25 @@ if (isset($_GET['id'])) {
         $res->bindParam(':owner_id', $_SESSION['id'], PDO::PARAM_INT);
         $res->execute();
     }
-}
 
+    if (isset($_SESSION['name']) && $_SESSION['name'] !== "") {
+        echo '<form action="" method="post">';
+        echo 'Commentaire: <input type="text" name="content">';
+        echo '<input type="submit">';
+        echo '</form>';
+
+        if (is_liked($img_id)) {       //photo pas like
+            echo '<form>';
+            echo '<input type="button" value="J\'aime">';
+            echo '</form>';
+        } else {      //photo likee
+            echo '<form>';
+            echo '<input type="button" value="Je n\'aime plus">';
+            echo '</form>';
+        }
+    }
+}
 ?>
 
-<?php if (isset($_SESSION['name']) && $_SESSION['name'] !== "") {
-echo '<form action="" method="post">';
-echo 'Commentaire: <input type="text" name="content">';
-echo '<input type="submit">';
-echo '</form>';
-} ?>
 </body>
 </html>
-
