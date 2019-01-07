@@ -1,9 +1,14 @@
 <?php
 include_once("db_connect.php");
-/*open*/
-session_start();
-create_users_table($db);
-create_gallery_table($db);
+
+function add_admin($db, $nom, $prenom, $mdp) {
+    $sql = "SELECT * FROM users WHERE mail = 'admin@mail.fr'";
+    $res = $db->query($sql);
+    if (!($res->fetch(PDO::FETCH_OBJ))) {
+        $sql = "INSERT INTO users(nom, prenom, mdp, mail, admin) VALUES ('$nom', '$prenom', '$mdp', 'admin@mail.fr', '2')";
+        $db->query($sql);
+    }
+}
 
 function create_users_table($db) {
     try {
@@ -36,13 +41,22 @@ function create_gallery_table($db) {
     }
 }
 
-function add_admin($db, $nom, $prenom, $mdp) {
-   $sql = "SELECT * FROM users WHERE mail = 'admin@mail.fr'";
-   $res = $db->query($sql); 
-    if (!($res->fetch(PDO::FETCH_OBJ))) {
-        $sql = "INSERT INTO users(nom, prenom, mdp, mail, admin) VALUES ('$nom', '$prenom', '$mdp', 'admin@mail.fr', '2')";
+function create_comments_table($db)
+{
+    try {
+        $sql = "CREATE TABLE `camagru_db`.`comments` ( `id` INT NOT NULL AUTO_INCREMENT , `content` LONGTEXT NOT NULL , `owner_id` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB
+                ALTER TABLE `comments` ADD `image_id` INT NOT NULL AFTER `owner_id`;";
         $db->query($sql);
     }
+    catch(PDOException $e) {
+        echo "Error: " . $e . PHP_EOL;
+        exit;
+    }
 }
+
+session_start();
+create_users_table($db);
+create_gallery_table($db);
+create_comments_table($db);
 
 ?>
