@@ -14,6 +14,8 @@
 require_once("../config/db_connect.php");
 session_start();
 
+/* Check et envoi de la requete */
+
 function data_check($data) {
     if (strncmp($data, "data:image/png;base64", 21)) {?>
         <script type="text/javascript">console.log("invalid data provided, please try again");</script>;<?php
@@ -22,37 +24,6 @@ function data_check($data) {
     }
     return 1;
 }
-/* Check et envoi de la requete */
-
-$_SESSION['refresh'] = 1;
-
-
-?>
-
-
-<script>
-
-    function getXMLHttpRequest() {
-        var xhr = null;
-        if (window.XMLHttpRequest || window.ActiveXObject) {
-            if (window.ActiveXObject) {
-                try {
-                    xhr = new ActiveXObject("Msxml2.XMLHTTP");
-                } catch(e) {
-                    xhr = new ActiveXObject("Microsoft.XMLHTTP");
-                }
-            } else {
-                xhr = new XMLHttpRequest();
-            }
-        } else {
-            alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
-            return null;
-        }
-        return xhr;
-    }
-    var base64 = "<?php echo $_POST['img']; ?>";
-
-</script> <?php
 
  if (isset($_POST['img']) && isset($_SESSION['id']) && $_SESSION['id'] !== "" && data_check(($_POST['img']))) {
     $sid = $_SESSION['id'];

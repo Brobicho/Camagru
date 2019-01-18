@@ -48,7 +48,7 @@ if (isset($_SESSION['name']) && $_SESSION['name'] != "")
         </div>
     </div>
 
-    <script>
+    <script type="text/javascript">
 
 
    /* CREATE XHR OBJECT */
@@ -110,7 +110,6 @@ if (isset($_SESSION['name']) && $_SESSION['name'] != "")
     var glassesContext = glasses_canvas.getContext('2d');
     var url;
     var active = 0;                                        // no filter check
-    var session_id = <?php echo $_SESSION['id']?>;
 
 
     /* FILTER PREVIEW SECTION */
@@ -178,7 +177,7 @@ if (isset($_SESSION['name']) && $_SESSION['name'] != "")
     // Custom upload
 
     document.getElementById("upload").addEventListener('change', function() {
-        if (typeof(this.files[0].name) !== null && select > 0) {
+        if (typeof(this.files[0].name) != null && select > 0) {
         alert(this.files[0].name);
 
         var fileReader = new FileReader();

@@ -5,12 +5,19 @@
 
 <!DOCTYPE html>
 <html>
-<head>
+<head></head>
 <meta charset="utf-8">
 <meta content="Comments" name="title">
 <link rel="stylesheet" type="text/css" href="../css/comments.css"> <!-- Faire le CSS-->
 <title>Comments</title>
 <body>
+
+<script type="text/javascript">
+
+
+
+</script>
+
 
 <?php
 
@@ -46,15 +53,16 @@ function load_comments($db, $id) {
     return (0);
 }
 
-function is_clean($content) {
-    //check session id
-    if (isset($content) && $content !== "")
-        return (1);
-    return (0);
-}
-
-function is_liked($image) {
-   // $sql = "SELECT ";
+function is_liked($image_id, $owner, $db)
+{
+    $sql = "SELECT * FROM likes WHERE image = :image && owner = :owner";
+    $res = $db->prepare($sql);
+    $res->bindParam(':image', $image_id);
+    $res->bindParam(':owner', $owner);
+    $res->execute();
+    if (!isset($res->image))
+        return (0);
+    return (1);
 }
 
 if (isset($_GET['id'])) {
@@ -62,30 +70,72 @@ if (isset($_GET['id'])) {
     display_image($db, $img_id);
     load_comments($db, $img_id);
 
-    if (isset($_POST['content']) && is_clean($_POST['content'])) {
-        $content = $_POST['content'];
-        $sql = "INSERT INTO comments(content, owner_id, image_id) VALUES (:content, :owner_id, :image_id);";
-        $res = $db->prepare($sql);
-        $res->bindParam(':image_id', $img_id, PDO::PARAM_INT);
-        $res->bindParam(':content', $content, PDO::PARAM_STR);
-        $res->bindParam(':owner_id', $_SESSION['id'], PDO::PARAM_INT);
-        $res->execute();
-    }
+
+    // Menus handler
 
     if (isset($_SESSION['name']) && $_SESSION['name'] !== "") {
-        echo '<form action="" method="post">';
+        echo '<form id="form">';
         echo 'Commentaire: <input type="text" name="content">';
         echo '<input type="submit">';
         echo '</form>';
+        echo $_SESSION['id'];
+        if (!is_liked($img_id, $_SESSION['id'], $db)) {                                                       /*photo pas like*/?>
+            <button id="like">J'aime</button>
+            <script type="text/javascript">
+                var img = <?php echo $img_id ?>;
 
-        if (is_liked($img_id)) {       //photo pas like
-            echo '<form>';
-            echo '<input type="button" value="J\'aime">';
-            echo '</form>';
-        } else {      //photo likee
-            echo '<form>';
-            echo '<input type="button" value="Je n\'aime plus">';
-            echo '</form>';
+                function getXMLHttpRequest() {
+                    var xhr = null;
+                    if (window.XMLHttpRequest || window.ActiveXObject) {
+                        if (window.ActiveXObject) {
+                            try {
+                                xhr = new ActiveXObject("Msxml2.XMLHTTP");
+                            } catch(e) {
+                                xhr = new ActiveXObject("Microsoft.XMLHTTP");
+                            }
+                        } else {
+                            xhr = new XMLHttpRequest();
+                        }
+                    } else {
+                        alert("Votre navigateur ne supporte pas l'objet XMLHTTPRequest...");
+                        return null;
+                    }
+                    return xhr;
+                }
+
+                document.getElementById("form").addEventListener("submit", function() {
+                    var xhr = getXMLHttpRequest();
+                    xhr.open("POST", "../scripts/comment.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.send("form=" + document.getElementById("form").value);
+                });
+
+                document.getElementById("like").addEventListener("click", function() {
+                    var xhr = getXMLHttpRequest();
+                    xhr.open("POST", "../scripts/comment.php", true);
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    xhr.send("like=" + img);
+                });
+
+
+            </script>
+
+        <?php
+        }
+        else {                                                                        ?>
+        <button id="unlike">Je n'aime plus"</button>
+        <script>
+
+            document.getElementById("unlike").addEventListener("click", function() {
+                var xhr = getXMLHttpRequest();
+                xhr.open("POST", "../scripts/comment.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.send("unlike=" + img);
+            });
+
+        </script>
+
+            <?php
         }
     }
 }
