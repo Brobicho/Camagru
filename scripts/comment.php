@@ -65,25 +65,27 @@ function unlike($image_id, $owner, $db) {
     return ($res);
 }
 
+if (isset($_SESSION['id'])) {
+
 // Like handler
 
-if (isset($_POST['like']))
-    $val = $_POST['like'];
-else
-    $val = $_POST['unlike'];
-if ((isset($_POST['like']) || isset($_POST['unlike'])) && isset($_SESSION['id']))
-    like_handler($db, $val);
+    if (isset($_POST['like']))
+        $val = $_POST['like'];
+    else if (isset($_POST['unlike']))
+        $val = $_POST['unlike'];
+    if ((isset($_POST['like']) || isset($_POST['unlike'])) && isset($_SESSION['id']))
+        like_handler($db, $val);
 
 // Comment handler
 
-if (isset($_SESSION['id']) && isset($_POST['content']) && is_clean($_POST['content'])) {
-    $content = $_POST['content'];
-    $sql = "INSERT INTO comments(content, owner_id, image_id) VALUES (:content, :owner_id, :image_id);";
-    $res = $db->prepare($sql);
-    $res->bindParam(':image_id', $img_id, PDO::PARAM_INT);
-    $res->bindParam(':content', $content, PDO::PARAM_STR);
-    $res->bindParam(':owner_id', $_SESSION['id'], PDO::PARAM_INT);
-    $res->execute();
+    if (isset($_SESSION['id']) && isset($_POST['content']) && is_clean($_POST['content'])) {
+        $content = $_POST['content'];
+        $sql = "INSERT INTO comments(content, owner_id, image_id) VALUES (:content, :owner_id, :image_id);";
+        $res = $db->prepare($sql);
+        $res->bindParam(':image_id', $img_id, PDO::PARAM_INT);
+        $res->bindParam(':content', $content, PDO::PARAM_STR);
+        $res->bindParam(':owner_id', $_SESSION['id'], PDO::PARAM_INT);
+        $res->execute();
+    }
 }
-
 ?>

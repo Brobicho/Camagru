@@ -74,14 +74,14 @@ if (isset($_GET['id'])) {
     // Menus handler
 
     if (isset($_SESSION['name']) && $_SESSION['name'] !== "") {
-        echo '<form id="form">';
-        echo 'Commentaire: <input type="text" name="content">';
-        echo '<input type="submit">';
-        echo '</form>';
-        echo $_SESSION['id'];
-        if (!is_liked($img_id, $_SESSION['id'], $db)) {                                                       /*photo pas like*/?>
-            <button id="like">J'aime</button>
-            <script type="text/javascript">
+        echo 'Commentaire: <input type="text" id="content">';
+        echo '<button id="submit">Envoyer</button>';
+        if (!is_liked($img_id, $_SESSION['id'], $db))
+            echo '<button id="btn" onclick="like();">Je n\'aime plus</button>';
+        else
+            echo '<button id="btn" onclick="like();">J\'aime</button>';
+        ?>
+        <script type="text/javascript">
                 var img = <?php echo $img_id ?>;
 
                 function getXMLHttpRequest() {
@@ -103,43 +103,40 @@ if (isset($_GET['id'])) {
                     return xhr;
                 }
 
-                document.getElementById("form").addEventListener("submit", function() {
+                document.getElementById("submit").addEventListener("click", function() {
                     var xhr = getXMLHttpRequest();
                     xhr.open("POST", "../scripts/comment.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.send("form=" + document.getElementById("form").value);
+                    alert(document.getElementById("content").value);
+                    xhr.send("content=" + document.getElementById("content").value);
                 });
 
-                document.getElementById("like").addEventListener("click", function() {
+                function like() {
+                    if (document.getElementById("btn").text === "J'aime") {
+                        var xhr = getXMLHttpRequest();
+                        xhr.open("POST", "../scripts/comment.php", true);
+                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        alert('like=' + img);
+                        xhr.send("like=" + img);
+                        document.getElementById("btn").text = "Je n'aime plus";
+                        document.getElementById("btn").value = "Je n'aime plus";
+                    }
+                    else
+                        unlike();
+                }
+
+                function unlike() {
                     var xhr = getXMLHttpRequest();
                     xhr.open("POST", "../scripts/comment.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    xhr.send("like=" + img);
-                });
-
-
+                    alert('unlike=' + img);
+                    xhr.send("unlike=" + img);
+                    document.getElementById("btn").text = "J'aime";
+                    document.getElementById("btn").value = "J'aime";
+                }
             </script>
-
-        <?php
-        }
-        else {                                                                        ?>
-        <button id="unlike">Je n'aime plus"</button>
-        <script>
-
-            document.getElementById("unlike").addEventListener("click", function() {
-                var xhr = getXMLHttpRequest();
-                xhr.open("POST", "../scripts/comment.php", true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.send("unlike=" + img);
-            });
-
-        </script>
-
-            <?php
-        }
-    }
-}
+<?php
+}}
 ?>
-
 </body>
 </html>
