@@ -1,6 +1,7 @@
 <?php
     require_once("../config/db_connect.php");
     session_start();
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +48,7 @@ function load_comments($db, $id) {
     $i = 0;
     echo 'Commentaires : ' . count($obj) . PHP_EOL;
     while ($i < count($obj)){
-        echo $obj[$i]->content . PHP_EOL;
+        echo htmlspecialchars_decode($obj[$i]->content) . PHP_EOL;
         $i++;
     }
     return (0);
@@ -60,13 +61,36 @@ function is_liked($image_id, $owner, $db)
     $res->bindParam(':image', $image_id);
     $res->bindParam(':owner', $owner);
     $res->execute();
-    if (!isset($res->image))
+    try {
+        $obj = $res->fetchAll(PDO::FETCH_OBJ);
+         }
+    catch (Exception $e) {
+        return 0;
+    }
+    if (!isset($obj[0]->image))
         return (0);
     return (1);
 }
 
-if (isset($_GET['id'])) {
+function isOk($id, $db) {
+    $sql = "SELECT * FROM gallery WHERE id = :image";
+    $res = $db->prepare($sql);
+    $res->bindParam(':image', $id);
+    $res->execute();
+    try {
+        $obj = $res->fetchAll(PDO::FETCH_OBJ);
+    }
+    catch (Exception $e) {
+        return 0;
+    }
+    if (!isset($obj[0]->id))
+        return (0);
+    return (1);
+}
+
+if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
     $img_id = $_GET['id'];
+    $_SESSION['like'] = is_liked($img_id, $_SESSION['id'], $db);
     display_image($db, $img_id);
     load_comments($db, $img_id);
 
@@ -74,16 +98,23 @@ if (isset($_GET['id'])) {
     // Menus handler
 
     if (isset($_SESSION['name']) && $_SESSION['name'] !== "") {
-        echo 'Commentaire: <input type="text" id="content">';
+        echo '<input type="text" id="content" value="Commenter...">';
         echo '<button id="submit">Envoyer</button>';
-        if (!is_liked($img_id, $_SESSION['id'], $db))
-            echo '<button id="btn" onclick="like();">Je n\'aime plus</button>';
-        else
-            echo '<button id="btn" onclick="like();">J\'aime</button>';
-        ?>
-        <script type="text/javascript">
-                var img = <?php echo $img_id ?>;
+        echo '<button id="btn" onclick="like();"></button>';
 
+        ?>
+
+
+        <script type="text/javascript">
+
+            var isliked = <?php echo $_SESSION['like']; ?>;
+            var img = <?php echo $img_id; ?>;
+
+            console.log(isliked);
+            if (typeof isliked != null && isliked)
+                document.getElementById("btn").innerHTML = "Je n'aime plus";
+            else
+                document.getElementById("btn").innerHTML = "J'aime";
                 function getXMLHttpRequest() {
                     var xhr = null;
                     if (window.XMLHttpRequest || window.ActiveXObject) {
@@ -107,19 +138,17 @@ if (isset($_GET['id'])) {
                     var xhr = getXMLHttpRequest();
                     xhr.open("POST", "../scripts/comment.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    alert(document.getElementById("content").value);
-                    xhr.send("content=" + document.getElementById("content").value);
+                    xhr.send("content=" + document.getElementById("content").value + "&img=" + img);
+                    location.reload();
                 });
 
                 function like() {
-                    if (document.getElementById("btn").text === "J'aime") {
+                    if (document.getElementById("btn").innerHTML === "J'aime") {
                         var xhr = getXMLHttpRequest();
                         xhr.open("POST", "../scripts/comment.php", true);
                         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        alert('like=' + img);
                         xhr.send("like=" + img);
-                        document.getElementById("btn").text = "Je n'aime plus";
-                        document.getElementById("btn").value = "Je n'aime plus";
+                        document.getElementById("btn").innerHTML = "Je n'aime plus";
                     }
                     else
                         unlike();
@@ -131,8 +160,7 @@ if (isset($_GET['id'])) {
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     alert('unlike=' + img);
                     xhr.send("unlike=" + img);
-                    document.getElementById("btn").text = "J'aime";
-                    document.getElementById("btn").value = "J'aime";
+                    document.getElementById("btn").innerHTML = "J'aime";
                 }
             </script>
 <?php

@@ -12,7 +12,13 @@ function is_liked($image_id, $owner, $db)
     $res->bindParam(':image', $image_id);
     $res->bindParam(':owner', $owner);
     $res->execute();
-    if (!isset($res->image))
+    try {
+        $obj = $res->fetchAll(PDO::FETCH_OBJ);
+    }
+    catch (Exception $e) {
+        return 0;
+    }
+    if (!isset($obj[0]->image))
         return (0);
     return (1);
 }
@@ -65,6 +71,23 @@ function unlike($image_id, $owner, $db) {
     return ($res);
 }
 
+function is_owner($db, $img, $user) {
+    // check image owner
+    $sql = "SELECT owner_id FROM gallery WHERE id = :image";
+    $res = $db->prepare($sql);
+    $res->bindParam(':image', $img);
+    $res->execute();
+    try {
+        $obj = $res->fetchAll(PDO::FETCH_OBJ);
+    }
+    catch (Exception $e) {
+        return 0;
+    }
+    if(isset($obj[0]->owner_id) && $obj[0]->owner_id === $user)
+        return 1;
+    return 0;
+}
+
 if (isset($_SESSION['id'])) {
 
 // Like handler
@@ -78,8 +101,11 @@ if (isset($_SESSION['id'])) {
 
 // Comment handler
 
-    if (isset($_SESSION['id']) && isset($_POST['content']) && is_clean($_POST['content'])) {
-        $content = $_POST['content'];
+    if (isset($_SESSION['id']) && isset($_POST['content']) && isset($_POST['img']) && is_numeric($_POST['img'])) {
+        $content = htmlspecialchars($_POST['content']);
+        if ($content !== $_POST['content'])
+            return;
+        $img_id = $_POST['img'];
         $sql = "INSERT INTO comments(content, owner_id, image_id) VALUES (:content, :owner_id, :image_id);";
         $res = $db->prepare($sql);
         $res->bindParam(':image_id', $img_id, PDO::PARAM_INT);
@@ -87,5 +113,21 @@ if (isset($_SESSION['id'])) {
         $res->bindParam(':owner_id', $_SESSION['id'], PDO::PARAM_INT);
         $res->execute();
     }
+
+// Delete scenes
+
+    if (isset($_SESSION['id']) && isset($_POST['delete']) && is_numeric($_POST['delete']) && is_owner($db, $_POST['delete'], $_SESSION['id']))
+    {
+        $sql = "DELETE FROM gallery WHERE id = :image;";
+        $res = $db->prepare($sql);
+        $res->bindParam(':image', $_POST['delete']);
+        try {
+            $res->execute(); }
+        catch (Exception $e) {
+            return (1);
+        }
+    }
 }
+
+
 ?>
