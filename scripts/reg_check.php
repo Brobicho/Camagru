@@ -1,5 +1,6 @@
 <?php
-    require_once("../config/db_connect.php");
+    session_start();
+	require_once("../config/db_connect.php");
 
 	 function is_here($db, $mail) {
         $sql = "SELECT * FROM users WHERE mail =" ."'".$mail."'";
@@ -9,35 +10,34 @@
 
 	function namecheck($post) {
 		$name = filter_var($post, FILTER_SANITIZE_SPECIAL_CHARS);
-		if ($name !== $post)
+		if ($name !== $post) {
 			err("Nom invalide.\n");
-		return $name;
+			return 0; }
+		return 1;
 	}
 	
 	function surnamecheck($post) {
 		$surname = filter_var($post, FILTER_SANITIZE_SPECIAL_CHARS);
-		if ($surname !== $post)
+		if ($surname !== $post) {
 			err("Prénom invalide.\n");
-		return $surname;
+	 		return 0; }
+		return 1;
 	}
 	
 	function pwdcheck($post) {
-		$hashed = filter_var($post, FILTER_SANITIZE_SPECIAL_CHARS);
-		if ($hashed !== $post)
-			err("Mot de passe invalide.\n");
-		return strtoupper(hash('sha256', $hashed));
+		return strtoupper(hash('sha256', $post));
 	}
 	
 	function mailcheck($post) {
-		$mail = filter_var($post, FILTER_SANITIZE_SPECIAL_CHARS);
+		$mail = filter_var($post, FILTER_SANITIZE_EMAIL);
 		if ($mail !== $post)
 			err("Adresse mail invalide.\n");
-		return $mail;
+		return 1;
 	}
 	
 	function err($msg) {
 		echo $msg;
-		//header('refresh:3;url=../register.php');
+		header('refresh:3;url=../pages/register.php');
 	}
 
 	function register($db, $name, $surname, $hashed, $mail) {
@@ -52,25 +52,36 @@
 		$res->bindParam(':henc', $henc);
 		$res->execute();
 		$title = "Bromagru - Inscription";
-		$msg = "Veuillez cliquer <a href=\"http://www.localhost:8008/reg.php?key=" . $henc . "\"" . "> ici </a> afin de confirmer votre inscription\n";
+		$msg = "Veuillez cliquer <a href=\"http://www.localhost:8008/activate.php?key=" . $henc . "\"" . "> ici </a> afin de confirmer votre inscription\n";
 		mail($mail, $title, $msg, null, '-fwebmaster@bromagru.com');
 		echo "Bienvenue, " . $surname . " ! Un mail de confirmation vous a été envoyé à l'adresse " . 
 			$mail . "." . PHP_EOL;
 		echo "Vous allez maintenant être redirigé vers la page d'accueil...\n";
-		//header('refresh:7;url=../index.php');
+		unset($_SESSION['create']);
+		header('refresh:4;url=../index.php');
 	}
-
+if (isset($_SESSION['create'])) {
+$error = 0;
 if ($_POST['pwdconfirm'] !== $_POST['pwd'])
 	err("Les mots de passe saisis sont différents.");
 else {
-$name = namecheck($_POST['name']);
-$surname = surnamecheck($_POST['surname']);
-$mail = mailcheck($_POST['mail']);
-$hashed = pwdcheck($_POST['pwd']);
 
-if (!is_here($db, $mail))
-	register($db, $name, $surname, $hashed, $mail);
-else 
-	err("Mail déjà existant dans la base de données. Veuillez ré-essayer.\n");
+	if (namecheck($_POST['name']) && surnamecheck($_POST['surname']) && mailcheck($_POST['mail'])
+		&& pwdcheck($_POST['pwd'])) {
+		$name = $_POST['name'];
+		$surname = $_POST['surname'];
+		$mail = $_POST['mail'];
+		$hashed = pwdcheck($_POST['pwd']);
+	}
+	else
+		$error = 1;
+	if (!$error && !is_here($db, $mail))
+		register($db, $name, $surname, $hashed, $mail);
+	else
+		err("Retour à la création de compte...\n");
+	}
 }
+else {
+	header('refresh:3;url=../pages/404.php', TRUE, 404); }
 ?>
+

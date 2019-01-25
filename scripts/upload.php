@@ -36,8 +36,7 @@ function data_check($data) {
 }
 
 else {
-    echo "Erreur 404 - Page non trouvée\n";
-    header('refresh:3;url=../index.php', null, 404);
+    header('refresh:0;url=../pages/404.php', null, 404);
 }
 
 ?>

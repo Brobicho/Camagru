@@ -1,5 +1,5 @@
 <?php
-    require_once("config/db_connect.php");
+    require_once("../config/db_connect.php");
 
     function err() {
         echo "Clé fournie invalide. Merci de contacter le support pour plus d'informations.";
@@ -15,7 +15,7 @@
 
     if (isset($_GET['key']) && $_GET['key'] != "")
     {
-        $filter = filter_var($_GET['key'], FILTER_SANITIZE_SPECIAL_CHARS);
+        $filter = filter_var($_GET['key'], HTML_SPECIALCHARS);
         if ($filter !== $_GET['key'])
             err();
         else { 

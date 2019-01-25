@@ -17,7 +17,7 @@
             $res = select($db, $filter, "henc", "mail");
             $_SESSION['reset'] = TRUE;
             $_SESSION['mail'] = $res->mail;
-            header('refresh:0;url=../reset.php');
+            header('refresh:0;url=reset.php');
         }
     }
     else {

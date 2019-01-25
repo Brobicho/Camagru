@@ -1,5 +1,5 @@
 <?php
-    require_once('config/db_connect.php');
+    require_once('../config/db_connect.php');
     session_start();
     $success = '<div id="container"><p>Mot de passe mis à jour. Redirection vers le menu principal...</p></div>';
     if (isset($_SESSION['reset']) && $_SESSION['reset'] === TRUE && isset($_SESSION['mail']))
@@ -11,7 +11,7 @@
 	<head>
 		<meta charset="utf-8">
         <title>Bromagru - Réinitialisation de mot de passe</title>
-        <link rel="stylesheet" href="css/register.css">
+        <link rel="stylesheet" href="../css/register.css">
 	</head>
 	<body>
         <?php if (isset($_SESSION['success'])) { echo $success; unset($_SESSION['success']); header('refresh:3;url=../index.php'); } ?>
@@ -43,10 +43,8 @@
     
     if (isset($_POST['pwd']) && isset($_POST['pwdconfirm']))
     {
-        if (($_POST['pwd'] === filter_var($_POST['pwd'], FILTER_SANITIZE_SPECIAL_CHARS)) &&
-            ($_POST['pwdconfirm'] === filter_var($_POST['pwdconfirm'], FILTER_SANITIZE_SPECIAL_CHARS)) &&
-            ($_POST['pwd'] === $_POST['pwdconfirm']))
-                pwreset($db, $_SESSION['mail'], $_POST['pwd']);
+        if ($_POST['pwd'] === $_POST['pwdconfirm'])
+            pwreset($db, $_SESSION['mail'], $_POST['pwd']);
         else
         {
             echo "Les mots de passe entrés sont différents. Veuillez réessayer.\n";
@@ -54,6 +52,4 @@
         }
     }
 }
-    else
-        header('refresh:0;url=index.php', TRUE, 401);
 ?>

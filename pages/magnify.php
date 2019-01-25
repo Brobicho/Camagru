@@ -2,7 +2,7 @@
     require_once("../config/db_connect.php");
     session_start();
 
-if (isset($_SESSION['name']) && $_SESSION['name'] != "")
+if (isset($_SESSION['id']))
 {
 
 
@@ -211,15 +211,12 @@ if (isset($_SESSION['name']) && $_SESSION['name'] != "")
     function drawCrown(context) {
         context.drawImage(crown_pic, canvas.width*0.35, 0, canvas.width*0.3, canvas.height*0.3);
     }
-
     function drawScar(context) {
         context.drawImage(blood_pic, canvas.width*0.41, canvas.height*0.28, canvas.width*0.13, canvas.height*0.13);
     }
-
     function drawGlasses(context) {
             context.drawImage(glasses_pic, canvas.width*0.37, canvas.height*0.28, canvas.width*0.3, canvas.height*0.3);
     }
-
 
     /* TRIGGER PHOTO SNAP */
 

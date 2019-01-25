@@ -23,13 +23,6 @@ function is_liked($image_id, $owner, $db)
     return (1);
 }
 
-function is_clean($content) {
-    //check session id
-    if (isset($content) && $content !== "")
-        return (1);
-    return (0);
-}
-
 function like_handler($db, $image) {
     if (isset($_POST['like']))
         like($image, $_SESSION['id'],$db);
@@ -88,7 +81,7 @@ function is_owner($db, $img, $user) {
     return 0;
 }
 
-if (isset($_SESSION['id'])) {
+if (isset($_SESSION['id']) && (isset($_POST['content']) || isset($_POST['like']) || isset($_POST['unlike']) || isset($_POST['delete']))) {
 
 // Like handler
 
@@ -96,12 +89,12 @@ if (isset($_SESSION['id'])) {
         $val = $_POST['like'];
     else if (isset($_POST['unlike']))
         $val = $_POST['unlike'];
-    if ((isset($_POST['like']) || isset($_POST['unlike'])) && isset($_SESSION['id']))
+    if (isset($_POST['like']) || isset($_POST['unlike']))
         like_handler($db, $val);
 
 // Comment handler
 
-    if (isset($_SESSION['id']) && isset($_POST['content']) && isset($_POST['img']) && is_numeric($_POST['img'])) {
+    if (isset($_POST['content']) && isset($_POST['img']) && is_numeric($_POST['img'])) {
         $content = htmlspecialchars($_POST['content']);
         if ($content !== $_POST['content'])
             return;
@@ -116,7 +109,7 @@ if (isset($_SESSION['id'])) {
 
 // Delete scenes
 
-    if (isset($_SESSION['id']) && isset($_POST['delete']) && is_numeric($_POST['delete']) && is_owner($db, $_POST['delete'], $_SESSION['id']))
+    if (isset($_POST['delete']) && is_numeric($_POST['delete']) && is_owner($db, $_POST['delete'], $_SESSION['id']))
     {
         $sql = "DELETE FROM gallery WHERE id = :image;";
         $res = $db->prepare($sql);
@@ -128,6 +121,7 @@ if (isset($_SESSION['id'])) {
         }
     }
 }
-
+else {
+    header('refresh:0;url=../pages/404.php', TRUE, 404); }
 
 ?>

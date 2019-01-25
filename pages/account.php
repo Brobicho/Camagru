@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include_once('config/db_connect.php');
+    require_once('../config/db_connect.php');
 
     function imgCount($db, $user) {
         $sql = "SELECT * FROM gallery WHERE owner_id = :owner";
@@ -49,7 +49,7 @@
 
             function dlt(img) {
                 var xhr = getXMLHttpRequest();
-                xhr.open("POST", "scripts/comment.php", true);
+                xhr.open("POST", "../scripts/comment.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 alert(img);
                 xhr.send("delete=" + img);
@@ -66,14 +66,14 @@
 ?>      <html>
         <body>
         <div>
-            <form action="scripts/logout.php">
+            <form action="../scripts/logout.php">
             <button type="submit" value="submit">
             Deconnexion
             </button>
             </form>
         </div>
         <div>
-            <form action="index.php">
+            <form action="../index.php">
             <button type="submit" value="submit">
             Revenir a l'index
             </button>
@@ -91,5 +91,5 @@
 
     else {
         echo "Vous n'êtes pas connecté. Redirection vers le menu principal...\n";
-        header('refresh:3;url=index.php', TRUE, 401); }
+        header('refresh:3;url=../index.php', TRUE, 401); }
 ?>

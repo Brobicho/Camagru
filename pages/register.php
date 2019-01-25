@@ -1,7 +1,9 @@
 <?php
-require_once('config/db_connect.php');
-if (isset($_SESSION['name']) && $_SESSION['name'] != "")
-	header('Location: account.php');
+require_once('../config/db_connect.php');
+session_start();
+$_SESSION['create'] = 1;
+if (isset($_SESSION['surname']))
+    header('Location: account.php');
 ?>
 
 <!doctype html>
@@ -9,11 +11,11 @@ if (isset($_SESSION['name']) && $_SESSION['name'] != "")
 	<head>
 		<meta charset="utf-8">
         <title>Bromagru - Inscription</title>
-        <link rel="stylesheet" href="css/register.css">
+        <link rel="stylesheet" href="../css/register.css">
 	</head>
 	<body>
         <div id="container">
-            <form action="scripts/reg_check.php" method="POST">
+            <form action="../scripts/reg_check.php" method="POST">
                 <h1>Inscription</h1>
                 <label><b>Nom</b></label>
                 <input type="text" autocomplete='family-name' placeholder="Entrez votre nom" name="name" required>
@@ -26,7 +28,7 @@ if (isset($_SESSION['name']) && $_SESSION['name'] != "")
                 <label><b>Email</b></label>
                 <input type="email" autocomplete='email' placeholder="Entrer votre email" name="mail" required>
                 <input type="submit" id='submit' value='OK'>
-                <label class="subscribe-item"><p><a href="login.php">Connectez-vous</a></p></label> 
+                <label class="subscribe-item"><p><a href="login.php">Connectez-vous</a></p></label>
             </form>
         </div>
     </body>

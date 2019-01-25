@@ -1,9 +1,6 @@
 <?php
-    session_start();
-    unset($_SESSION['mail']);
-    unset($_SESSION['name']);
-    unset($_SESSION['surname']);
-    unset($_SESSION['admin']);
-    unset($_SESSION['active']);
+	session_start();
+    session_destroy();
     header('refresh:0;url=../index.php');
 ?>
+

@@ -73,6 +73,8 @@ function is_liked($image_id, $owner, $db)
 }
 
 function isOk($id, $db) {
+    if (!is_numeric($_GET['id']))
+        return 0;
     $sql = "SELECT * FROM gallery WHERE id = :image";
     $res = $db->prepare($sql);
     $res->bindParam(':image', $id);
@@ -88,9 +90,12 @@ function isOk($id, $db) {
     return (1);
 }
 
+// DATA CHECK
+
 if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
     $img_id = $_GET['id'];
-    $_SESSION['like'] = is_liked($img_id, $_SESSION['id'], $db);
+    if (isset($_SESSION['id']))
+        $_SESSION['like'] = is_liked($img_id, $_SESSION['id'], $db);
     display_image($db, $img_id);
     load_comments($db, $img_id);
 
@@ -102,6 +107,7 @@ if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
         echo '<button id="submit">Envoyer</button>';
         echo '<button id="btn" onclick="like();"></button>';
 
+        // JAVASCRIPT LIKE & COMMENT HANDLER
         ?>
 
 
@@ -110,7 +116,6 @@ if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
             var isliked = <?php echo $_SESSION['like']; ?>;
             var img = <?php echo $img_id; ?>;
 
-            console.log(isliked);
             if (typeof isliked != null && isliked)
                 document.getElementById("btn").innerHTML = "Je n'aime plus";
             else
@@ -142,29 +147,31 @@ if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
                     location.reload();
                 });
 
-                function like() {
-                    if (document.getElementById("btn").innerHTML === "J'aime") {
-                        var xhr = getXMLHttpRequest();
-                        xhr.open("POST", "../scripts/comment.php", true);
-                        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        xhr.send("like=" + img);
-                        document.getElementById("btn").innerHTML = "Je n'aime plus";
-                    }
-                    else
-                        unlike();
-                }
-
-                function unlike() {
+            function like() {
+                if (document.getElementById("btn").innerHTML === "J'aime") {
                     var xhr = getXMLHttpRequest();
                     xhr.open("POST", "../scripts/comment.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                    alert('unlike=' + img);
-                    xhr.send("unlike=" + img);
-                    document.getElementById("btn").innerHTML = "J'aime";
+                    xhr.send("like=" + img);
+                    document.getElementById("btn").innerHTML = "Je n'aime plus";
                 }
+                else
+                    unlike();
+            }
+            function unlike() {
+                var xhr = getXMLHttpRequest();
+                xhr.open("POST", "../scripts/comment.php", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                alert('unlike=' + img);
+                xhr.send("unlike=" + img);
+                document.getElementById("btn").innerHTML = "J'aime";
+            }
+
             </script>
 <?php
 }}
+else
+    header('refresh:0;url=../pages/404.php', true, 404);
 ?>
 </body>
 </html>

@@ -27,7 +27,7 @@
 if (!isset($_SESSION['name'])) { 
 ?>
 <div class="col-2 log">
-  <form action="login.php">
+  <form action="pages/login.php">
   <button type="submit" value="submit">
     Login / Register
   </button>
@@ -38,7 +38,7 @@ if (!isset($_SESSION['name'])) {
 else {
 ?>
 <div class="col-2 log">
-<form action="account.php">
+<form action="pages/account.php">
   <button type="submit" value="submit">
     Compte
   </button>
