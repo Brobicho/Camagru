@@ -1,14 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta content="debug" name="title">
-    <title>Upload debug page</title>
-
-<body>
-<img id="image" >
-<img id="filter">
-<canvas id="canvas"></canvas>
 <?php
 
 require_once("../config/db_connect.php");
@@ -40,6 +29,3 @@ else {
 }
 
 ?>
-
-</body>
-</html>

@@ -32,7 +32,16 @@ if (isset($_SESSION['id']))
             <canvas class="blood" id ="blood_canvas"></canvas>
             <canvas class="glasses" id ="glasses_canvas"></canvas>
         </div>
-        <div class="col-2"></div>
+        <div class="col-2"><form action="../scripts/logout.php">
+                <button type="submit" value="submit">
+                    Déconnexion
+                </button>
+            </form>
+            <form action="../index.php">
+                <button type="submit" value="submit">
+                    Menu principal
+                </button>
+            </form></div>
     </div>
     <div class="row">
 
@@ -119,11 +128,11 @@ if (isset($_SESSION['id']))
     document.getElementById("crown_pic").addEventListener("click", function() {
         document.getElementById("snap").style.backgroundColor = "#53af57";
         document.getElementById("up").style.backgroundColor = "#53af57";
-        if (select == 1)
+        if (select === 1)
             crownContext.clearRect(0, 0, 5000, 5000);
-        if (select == 2)
+        if (select === 2)
             bloodContext.clearRect(0, 0, 5000, 5000);
-        else if (select == 3)
+        else if (select === 3)
             glassesContext.clearRect(0, 0, 5000, 5000);
         crownContext.drawImage(crown_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
         select = 1;
@@ -136,11 +145,11 @@ if (isset($_SESSION['id']))
     document.getElementById("blood_pic").addEventListener("click", function() {
         document.getElementById("snap").style.backgroundColor = "#53af57";
         document.getElementById("up").style.backgroundColor = "#53af57";
-        if (select == 2)
+        if (select === 2)
             bloodContext.clearRect(0, 0, 5000, 5000);
-        if (select == 1)
+        if (select === 1)
             crownContext.clearRect(0, 0, 5000, 5000);
-        else if (select == 3)
+        else if (select === 3)
             glassesContext.clearRect(0, 0, 5000, 5000);
         bloodContext.drawImage(blood_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
         select = 2;
@@ -153,11 +162,11 @@ if (isset($_SESSION['id']))
     document.getElementById("glasses_pic").addEventListener("click", function() {
         document.getElementById("snap").style.backgroundColor = "#53af57";
         document.getElementById("up").style.backgroundColor = "#53af57";
-        if (select == 3)
+        if (select === 3)
             glassesContext.clearRect(0, 0, 5000, 5000);
-        if (select == 1)
+        if (select === 1)
             crownContext.clearRect(0, 0, 5000, 5000);
-        else if (select == 2)
+        else if (select === 2)
             bloodContext.clearRect(0, 0, 5000, 5000);
         glassesContext.drawImage(glasses_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
         select = 3;
@@ -177,7 +186,7 @@ if (isset($_SESSION['id']))
     // Custom upload
 
     document.getElementById("upload").addEventListener('change', function() {
-        if (typeof(this.files[0].name) != null && select > 0) {
+        if (typeof(this.files[0].name) != null && typeof(select) != null && select > 0) {
         alert(this.files[0].name);
 
         var fileReader = new FileReader();
@@ -188,9 +197,9 @@ if (isset($_SESSION['id']))
                 var canvas_up = document.getElementById("canvas_up");
                 var ctx = canvas_up.getContext("2d");
                 ctx.drawImage(img, 0, 0);
-                if (select == 1)
+                if (select === 1)
                     drawCrown(ctx);
-                else if (select == 2)
+                else if (select === 2)
                     drawScar(ctx);
                 else
                     drawGlasses(ctx);
@@ -202,7 +211,7 @@ if (isset($_SESSION['id']))
         alert('Image upload avec succès.');
       }
       else
-          alert('error')
+          alert('Fichier invalide / aucun filtre selectionné. Merci de bien vouloir réessayer avec une image png valide et un filtre actif.');
     });
 
 
@@ -222,35 +231,35 @@ if (isset($_SESSION['id']))
 
     document.getElementById("snap").addEventListener("click", function() {
 
-        if (active != 0) {                                                  // Check filter select
+        if (active !== null) {                                                  // Check filter select
 
         if (!pictaken || pictaken > 2) {
                 context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, canvas.width, canvas.height);
-            if (select == 1)
+            if (select === 1)
                 drawCrown(context);
-            else if (select == 2)
+            else if (select === 2)
                 drawScar(context);
-            else if (select == 3)
+            else if (select === 3)
                 drawGlasses(context);
             drawSendXhr(canvas);
         }
-        if (pictaken == 1) {
+        if (pictaken === 1) {
                 context2.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, canvas2.width, canvas2.height);
-            if (select == 1)
+            if (select === 1)
                 drawCrown(context2);
-            else if (select == 2)
+            else if (select === 2)
                 drawScar(context2);
-            else if (select == 3)
+            else if (select === 3)
                 drawGlasses(context2);
             drawSendXhr(canvas2);
         }
-        if (pictaken == 2) {
+        if (pictaken === 2) {
             context3.drawImage(video, 0, 0, video.videoWidth, video.videoHeight, 0, 0, canvas3.width, canvas3.height);
-            if (select == 1)
+            if (select === 1)
                 drawCrown(context3);
-            else if (select == 2)
+            else if (select === 2)
                 drawScar(context3);
-            else if (select == 3)
+            else if (select === 3)
                 drawGlasses(context3);
             drawSendXhr(canvas3);
     }

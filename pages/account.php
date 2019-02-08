@@ -51,8 +51,8 @@
                 var xhr = getXMLHttpRequest();
                 xhr.open("POST", "../scripts/comment.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                alert(img);
                 xhr.send("delete=" + img);
+                alert(\'Image supprimée\');
 
             }';
         echo '</script>';
@@ -63,7 +63,14 @@
     if (isset($_SESSION['id']))
     {
         echo "Bienvenue, " . $_SESSION['surname'] . PHP_EOL;
-?>      <html>
+?>      <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <meta content="Mon compte" name="title">
+            <link rel="stylesheet" type="text/css" href="../css/account.css">
+            <title>Mon compte</title>
+        </head>
         <body>
         <div>
             <form action="../scripts/logout.php">
@@ -80,7 +87,7 @@
             </form>
         </div>
         <div>
-            Vous avez <?php echo imgCount($db, $_SESSION['id']);?> montage(s) enregistré(s) : <?php displayPics($db, $_SESSION['id']); ?>
+            Vous avez <?php echo imgCount($db, $_SESSION['id']);?> montage(s) enregistré(s) : <br/><br/><?php displayPics($db, $_SESSION['id']); ?>
         </div>
         </body>
     </html>

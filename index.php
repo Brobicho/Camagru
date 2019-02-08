@@ -1,5 +1,23 @@
 <?php
-  session_start();
+  require_once('config/db_connect.php');
+    session_start();
+
+  function get_image($db) {
+    $sql = "SELECT * FROM `gallery`";
+    $res = $db->query($sql);
+    try {
+        $obj = $res->fetchAll(PDO::FETCH_OBJ);
+    } catch (Exception $e) {
+        echo '<p>Aucun montage à afficher pour le moment</p>';
+        return 0;
+    }
+    $i = 0;
+    while ($i < count($obj)){
+        echo '<a href="pages/comments.php?id=' . $obj[$i]->id . '"><img src="' . $obj[$i]->data . '" /></a>';
+        $i++;
+    }
+    return (1);
+}
 ?>
 
 <!DOCTYPE html>
@@ -16,20 +34,21 @@
 
 <div class="row">
 
-<div class="col-5">
-  <h1>Main Title</h1>
-  <p>42.</p>
-</div>
+<div class="col-10">
+  <h1 class="gallery">Gallerie publique</h1>
+    <p>Cliquez sur une image pour accéder à la section commentaires de celle-ci !</p>
+  <?php
+  if (!isset($_SESSION['id'])) {
+    echo '<p>Veuillez vous connecter ou vous inscrire pour avoir accès à toutes les fonctionnalités du site !</p>'; }
+?></div>
 
-<div class="col-5">
-</div>
 <?php
 if (!isset($_SESSION['name'])) { 
 ?>
 <div class="col-2 log">
   <form action="pages/login.php">
   <button type="submit" value="submit">
-    Login / Register
+    Login  || Register
   </button>
   </form>
 </div>
@@ -48,27 +67,21 @@ else {
     Déconnexion
   </button>
   </form>
+    <form action="pages/magnify.php">
+        <button type="submit" value="submit">
+            Prendre une photo !
+        </button>
+    </form>
 </div>
 <?php
 }
-?>
-<div class="col-4">
-</div>
-<div class="col-3">
-  <div class="rightcontent">
-    <h2>MMMMH</h2>
-    <p>aaaaah.</p>
-    <h2>MMMMMH ?</h2>
-    <p>aaaah.</p>
-    <h2>mmmh.</h2>
-    <p>AAAAAAAAAH !!!</p>
-  </div>
-</div>
 
-</div>
+get_image($db);
+
+?>
 
 <div class="footer">
-  <p>FOOTER</p>
+  <p class="title">(c)brobicho 2019 </p>
 </div>
 
 </body>
