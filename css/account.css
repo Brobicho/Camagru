@@ -35,3 +35,19 @@ img {
     }
 
 }
+
+.delog {
+    background-color: white;
+    border: outset lightgrey 0.2vmax;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vmax;
+}
+
+.delog:hover {
+    background-color: white;
+    color:grey;
+    border:inset white 0.2vmax;
+}

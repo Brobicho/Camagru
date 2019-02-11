@@ -2,9 +2,14 @@
 require_once("../config/db_connect.php");
 
 function is_here($db, $mail) {
-    $sql = "SELECT * FROM users WHERE mail =" ."'".$mail."'";
-    $res = $db->query($sql);
-    return($res->fetch(PDO::FETCH_OBJ));
+    $sql = "SELECT * FROM users WHERE mail = :mail";
+    $res = $db->prepare($sql);
+    $res->bindParam(":mail", $mail);
+    $res->execute();
+    $obj = $res->fetchAll(PDO::FETCH_OBJ);
+    if (isset($obj[0]))
+        return($obj[0]);
+    return 0;
 }
 ?>
         <html>
@@ -32,8 +37,11 @@ else {
     $enc = base64_encode(openssl_random_pseudo_bytes(30));
     $henc = hash("sha256", $enc);
 	mail($mail, 'Bromagru - Mot de passe oublié', 'Veuillez cliquer sur le lien suivant afin de réinitialiser votre mot de passe : http://localhost:8008/pages/forgot.php?key=' . $henc . '/', null,  '-fwebmaster@bromagru.com');
-    $sql = "UPDATE `users` SET `henc` =" . "'" . $henc . "'" . "WHERE `users`.`mail` =" . "'" . $mail . "'";
-    $db->query($sql);
+    $sql = "UPDATE `users` SET `henc` = :henc WHERE `users`.`mail` = :mail";
+	$res = $db->prepare($sql);
+	$res->bindParam(':mail', $mail);
+	$res->bindParam(':henc', $henc);
+	$res->execute();
     echo "Mail envoyé. Vous allez maintenant être redirigé vers la page de connexion.\n";
     header('refresh:3;url=../pages/login.php');
 }

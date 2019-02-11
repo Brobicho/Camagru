@@ -49,3 +49,21 @@ b {
     color: gray;
 }
 
+button {
+
+    background-color: white;
+    border: outset lightgrey 0.2vmax;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5vmax;
+    display: flex;
+}
+
+button:hover {
+    background-color: white;
+    color:grey;
+    border:inset white 0.2vmax;
+}
+

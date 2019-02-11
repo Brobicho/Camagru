@@ -3,14 +3,19 @@
     require_once("../config/db_connect.php");
 
     function is_here($db, $mail) {
-        $sql = "SELECT * FROM users WHERE mail =" ."'".$mail."'";
-        $res = $db->query($sql);
-        return($res->fetch(PDO::FETCH_OBJ));
+        $sql = "SELECT * FROM users WHERE mail = :mail";
+        $res = $db->prepare($sql);
+        $res->bindParam(":mail", $mail);
+        $res->execute();
+        $obj = $res->fetchAll(PDO::FETCH_OBJ);
+        if (isset($obj[0]))
+            return($obj[0]);
+        return 0;
 }
 
 function connect($db, $res, $mail, $hashed) {
     if (strtoupper($hashed) === $res->mdp) {
-		if ($res->henc != 0) {
+		if ($res->henc !== "0") {
 			echo "Votre compte est inactif. Merci de bien vouloir consulter vos mails ! Vous allez maintenant être redirigé vers la page d'accueil...\n";
 			header('refresh:5;url=../index.php'); 
 		}

@@ -14,7 +14,12 @@ if (isset($_SESSION['surname']))
         <link rel="stylesheet" href="../css/register.css">
 	</head>
 	<body>
-        <div id="container">
+    <form action="../../index.php">
+        <button type="submit" value="submit">
+            Retour
+        </button>
+    </form>
+    <div id="container">
             <form action="../scripts/reg_check.php" method="POST">
                 <h1>Inscription</h1>
                 <label><b>Nom</b></label>

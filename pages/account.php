@@ -30,6 +30,15 @@
         $i = 0;
         echo '<script>';
         echo '
+                function sleep(milliseconds) {
+                        var start = new Date().getTime();
+                        for (var i = 0; i < 1e7; i++) {
+                            if ((new Date().getTime() - start) > milliseconds){
+                                break;
+                            }
+                        }
+                    }
+
                 function getXMLHttpRequest() {
                 var xhr = null;
                 if (window.XMLHttpRequest || window.ActiveXObject) {
@@ -53,6 +62,9 @@
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.send("delete=" + img);
                 alert(\'Image supprimée\');
+                sleep(50);
+                location.reload(\'true\');
+                
 
             }';
         echo '</script>';
@@ -74,14 +86,14 @@
         <body>
         <div>
             <form action="../scripts/logout.php">
-            <button type="submit" value="submit">
+            <button class="delog" type="submit" value="submit">
             Deconnexion
             </button>
             </form>
         </div>
         <div>
             <form action="../index.php">
-            <button type="submit" value="submit">
+            <button class="delog" type="submit" value="submit">
             Revenir a l'index
             </button>
             </form>

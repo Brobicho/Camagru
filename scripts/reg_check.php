@@ -2,10 +2,15 @@
     session_start();
 	require_once("../config/db_connect.php");
 
-	 function is_here($db, $mail) {
-        $sql = "SELECT * FROM users WHERE mail =" ."'".$mail."'";
-        $res = $db->query($sql);
-        return($res->fetch(PDO::FETCH_OBJ));
+	function is_here($db, $mail) {
+		$sql = "SELECT * FROM users WHERE mail = :mail";
+		$res = $db->prepare($sql);
+		$res->bindParam(":mail", $mail);
+		$res->execute();
+		$obj = $res->fetchAll(PDO::FETCH_OBJ);
+		if (isset($obj[0]))
+			return($obj[0]);
+		return 0;
 	}
 
 	function namecheck($post) {
@@ -52,7 +57,7 @@
 		$res->bindParam(':henc', $henc);
 		$res->execute();
 		$title = "Bromagru - Inscription";
-		$msg = "Veuillez cliquer <a href=\"http://www.localhost:8008/activate.php?key=" . $henc . "\"" . "> ici </a> afin de confirmer votre inscription\n";
+		$msg = "Veuillez cliquer <a href=\"http://www.localhost:8008/scripts/activate.php?key=" . $henc . "\"" . "> ici </a> afin de confirmer votre inscription\n";
 		mail($mail, $title, $msg, null, '-fwebmaster@bromagru.com');
 		echo "Bienvenue, " . $surname . " ! Un mail de confirmation vous a été envoyé à l'adresse " . 
 			$mail . "." . PHP_EOL;

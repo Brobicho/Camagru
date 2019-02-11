@@ -12,6 +12,11 @@
         <link rel="stylesheet" href="../css/login.css">
 	</head>
 	<body>
+        <form action="../../index.php">
+            <button type="submit" value="submit">
+                Retour
+            </button>
+        </form>
         <div id="container">
             <form action="../scripts/login_check.php" method="POST">
                 <h1>Connexion</h1>
