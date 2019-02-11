@@ -168,6 +168,7 @@ if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
                     xhr.open("POST", "../scripts/comment.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.send("content=" + document.getElementById("content").value + "&img=" + img);
+                    sleep(50);
                     location.reload(true);
                 });
 

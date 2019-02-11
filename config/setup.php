@@ -24,7 +24,7 @@ function create_users_table($db) {
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `mail` (`mail`)) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;";
         $db->query($sql);
-        add_admin($db, 'admin', 'admin', hash('sha256', 'admin'));
+        add_admin($db, 'admin', 'admin', strtoupper(hash('sha256', 'admin')));
     }
     catch(PDOException $e) {
         echo "Error: " . $e . PHP_EOL;
@@ -39,6 +39,7 @@ function create_gallery_table($db) {
 		`id` int(11) NOT NULL AUTO_INCREMENT,
 		`owner_id` int(11) NOT NULL,
 		`data` longtext COLLATE latin1_general_ci NOT NULL,
+		`timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 		`likes` int(11) NOT NULL,
 		PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;";
     $db->query($sql);
