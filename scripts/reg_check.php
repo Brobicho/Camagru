@@ -30,6 +30,10 @@
 	}
 	
 	function pwdcheck($post) {
+		if (strlen($post) < 8 || ctype_alpha($post) || ctype_digit($post)) {
+			echo 'Mot de passe non sécurisé. <br/>';
+			return 0;
+		}
 		return strtoupper(hash('sha256', $post));
 	}
 	
@@ -58,7 +62,8 @@
 		$res->execute();
 		$title = "Bromagru - Inscription";
 		$msg = "Veuillez cliquer <a href=\"http://www.localhost:8008/scripts/activate.php?key=" . $henc . "\"" . "> ici </a> afin de confirmer votre inscription\n";
-		mail($mail, $title, $msg, null, '-fwebmaster@bromagru.com');
+		$header = "From: webmaster@bromagru.com" . phpversion();
+		mail($mail, $title, $msg, $header);
 		echo "Bienvenue, " . $surname . " ! Un mail de confirmation vous a été envoyé à l'adresse " . 
 			$mail . "." . PHP_EOL;
 		echo "Vous allez maintenant être redirigé vers la page d'accueil...\n";

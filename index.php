@@ -34,10 +34,12 @@
 <body>
 
 <div class="col-12 header">
-  <h1><center>Bromagru</center></h1>
+  <h1>Bromagru</h1>
 </div>
 <?php if(!isset($_SESSION['id'])) { ?>
 <div class="row">
+<div class="col-10">
+</div>
 <div class="col-2 log">
     <form action="pages/login.php">
         <button type="submit" value="submit">
@@ -46,28 +48,33 @@
     </form>
 </div>
 </div>
+
 <?php } else { ?>
+<div class="row">
+<div class="col-10">
+</div>
 <div class="col-2 log">
     <form action="pages/account.php">
-        <button type="submit" value="submit">
+        <button class="actbtn" type="submit" value="submit">
             Compte
         </button>
     </form>
     <form action="scripts/logout.php">
-        <button type="submit" value="submit">
+        <button class="delogbtn" type="submit" value="submit">
             Déconnexion
         </button>
     </form>
     <form action="pages/magnify.php">
-        <button type="submit" value="submit">
+        <button class="takebtn" type="submit" value="submit">
             Prendre une photo !
         </button>
     </form>
 </div>
+</div>
 <?php } ?>
 
 <div class="row">
-<div class="col-10">
+<div class="col-12">
   <h1 class="gallery">Galerie publique</h1>
     <p class="imgisthere">Cliquez sur une image pour accéder à la section commentaires de celle-ci !</p>
     <p class="imgisnotthere">Aucune image à afficher pour le moment...</p>
