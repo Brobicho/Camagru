@@ -62,7 +62,7 @@
 		$res->execute();
 		$title = 'Bromagru - Inscription';
 		$msg = 'Veuillez cliquer <a href="http://www.localhost:8008/scripts/activate.php?key=' . $henc . '"> ici </a> afin de confirmer votre inscription\n';
-		$header = '-fwebmaster@bromagru.com';
+		$param = '-fwebmaster@bromagru.com';
 		mail($mail, $title, $msg, null, $param);
 		echo "Bienvenue, " . $surname . " ! Un mail de confirmation vous a été envoyé à l'adresse " . 
 			$mail . "." . '<br/>';
