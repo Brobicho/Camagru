@@ -60,12 +60,12 @@
 		$res->bindParam(':mail', $mail);
 		$res->bindParam(':henc', $henc);
 		$res->execute();
-		$title = "Bromagru - Inscription";
-		$msg = "Veuillez cliquer <a href=\"http://www.localhost:8008/scripts/activate.php?key=" . $henc . "\"" . "> ici </a> afin de confirmer votre inscription\n";
-		$header = "From: webmaster@bromagru.com" . phpversion();
-		mail($mail, $title, $msg, $header);
+		$title = 'Bromagru - Inscription';
+		$msg = 'Veuillez cliquer <a href="http://www.localhost:8008/scripts/activate.php?key=' . $henc . '"> ici </a> afin de confirmer votre inscription\n';
+		$header = '-fwebmaster@bromagru.com';
+		mail($mail, $title, $msg, null, $param);
 		echo "Bienvenue, " . $surname . " ! Un mail de confirmation vous a été envoyé à l'adresse " . 
-			$mail . "." . PHP_EOL;
+			$mail . "." . '<br/>';
 		echo "Vous allez maintenant être redirigé vers la page d'accueil...\n";
 		unset($_SESSION['create']);
 		header('refresh:4;url=../index.php');
