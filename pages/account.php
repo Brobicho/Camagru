@@ -61,7 +61,6 @@
                 xhr.open("POST", "../scripts/comment.php", true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.send("delete=" + img);
-                alert(\'Image supprimée\');
                 sleep(50);
                 location.reload(\'true\');
                 
@@ -84,6 +83,12 @@
             <title>Mon compte</title>
         </head>
         <body>
+        <div>
+            <form action="../scripts/userchange.php" method="POST">
+                <input type="text" autocomplete="mail" placeholder="Changer de mail..." name="mail" required>
+                <input type="submit" value="Valider">
+            </form>
+        </div>
         <div>
             <form action="../scripts/logout.php">
             <button class="delog" type="submit" value="submit">

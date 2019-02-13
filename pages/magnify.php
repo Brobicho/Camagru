@@ -20,11 +20,11 @@ if (isset($_SESSION['id']))
 <body>
     <div class="row">
         <div class="filters col-2">
-            <img src="../img/testcrown.png" id="crown_pic" class="pic">
+            <img src="../img/testcrown.png" id="crown_pic" class="pic" onclick="selectCrown()">
             <br/>
             <br/>
-            <img src="../img/blood.svg" id="blood_pic" class="pic">
-            <img src="../img/glasses.png" id="glasses_pic" class="pic">
+            <img src="../img/blood.svg" id="blood_pic" class="pic" onclick="selectBlood()">
+            <img src="../img/glasses.png" id="glasses_pic" class="pic" onclick="selectGlasses()">
         </div>
         <div class="col-8">
             <video id="video" class="video" autoplay></video>
@@ -46,9 +46,9 @@ if (isset($_SESSION['id']))
     <div class="row">
 
         <div class="mini col-8">
-            <button class="snap" id="snap">Go</button>
+            <button class="snap" id="snap">Smile</button>
             <label for="upload" class="label-file" id="up">Upload</label>
-            <input type="file" class="upload" id="upload"></input>
+            <input type="file" class="upload" id="upload">
             <canvas class="canvas" id="canvas"></canvas>
             <canvas class="canvas2" id="canvas2"></canvas>
             <canvas class="canvas3" id="canvas3"></canvas>
@@ -81,6 +81,59 @@ if (isset($_SESSION['id']))
         }
         return xhr;
     }
+
+   /* FILTER PREVIEW SECTION */
+
+   // Crown is selected
+
+   function selectCrown() {
+       document.getElementById("snap").style.backgroundColor = "#53af57";
+       document.getElementById("up").style.backgroundColor = "#53af57";
+       if (select === 1)
+           crownContext.clearRect(0, 0, 5000, 5000);
+       if (select === 2)
+           bloodContext.clearRect(0, 0, 5000, 5000);
+       else if (select === 3)
+           glassesContext.clearRect(0, 0, 5000, 5000);
+       crownContext.drawImage(crown_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
+       select = 1;
+       active = 1;
+   }
+
+
+   // Scar is selected
+
+   function selectBlood() {
+       document.getElementById("snap").style.backgroundColor = "#53af57";
+       document.getElementById("up").style.backgroundColor = "#53af57";
+       if (select === 2)
+           bloodContext.clearRect(0, 0, 5000, 5000);
+       if (select === 1)
+           crownContext.clearRect(0, 0, 5000, 5000);
+       else if (select === 3)
+           glassesContext.clearRect(0, 0, 5000, 5000);
+       bloodContext.drawImage(blood_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
+       select = 2;
+       active = 1;
+   }
+
+
+   // Glasses are selected
+
+   function selectGlasses() {
+       document.getElementById("snap").style.backgroundColor = "#53af57";
+       document.getElementById("up").style.backgroundColor = "#53af57";
+       if (select === 3)
+           glassesContext.clearRect(0, 0, 5000, 5000);
+       if (select === 1)
+           crownContext.clearRect(0, 0, 5000, 5000);
+       else if (select === 2)
+           bloodContext.clearRect(0, 0, 5000, 5000);
+       glassesContext.drawImage(glasses_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
+       select = 3;
+       active = 1;
+   }
+
 
     /* CAM ACCESS SECTION */
 
@@ -121,58 +174,6 @@ if (isset($_SESSION['id']))
     var active = 0;                                        // no filter check
 
 
-    /* FILTER PREVIEW SECTION */
-
-        // Crown is selected
-
-    document.getElementById("crown_pic").addEventListener("click", function() {
-        document.getElementById("snap").style.backgroundColor = "#53af57";
-        document.getElementById("up").style.backgroundColor = "#53af57";
-        if (select === 1)
-            crownContext.clearRect(0, 0, 5000, 5000);
-        if (select === 2)
-            bloodContext.clearRect(0, 0, 5000, 5000);
-        else if (select === 3)
-            glassesContext.clearRect(0, 0, 5000, 5000);
-        crownContext.drawImage(crown_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
-        select = 1;
-        active = 1;
-    });
-
-
-        // Scar is selected
-
-    document.getElementById("blood_pic").addEventListener("click", function() {
-        document.getElementById("snap").style.backgroundColor = "#53af57";
-        document.getElementById("up").style.backgroundColor = "#53af57";
-        if (select === 2)
-            bloodContext.clearRect(0, 0, 5000, 5000);
-        if (select === 1)
-            crownContext.clearRect(0, 0, 5000, 5000);
-        else if (select === 3)
-            glassesContext.clearRect(0, 0, 5000, 5000);
-        bloodContext.drawImage(blood_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
-        select = 2;
-        active = 1;
-    });
-
-
-        // Glasses are selected
-
-    document.getElementById("glasses_pic").addEventListener("click", function() {
-        document.getElementById("snap").style.backgroundColor = "#53af57";
-        document.getElementById("up").style.backgroundColor = "#53af57";
-        if (select === 3)
-            glassesContext.clearRect(0, 0, 5000, 5000);
-        if (select === 1)
-            crownContext.clearRect(0, 0, 5000, 5000);
-        else if (select === 2)
-            bloodContext.clearRect(0, 0, 5000, 5000);
-        glassesContext.drawImage(glasses_pic, 0, 0, video.videoWidth*0.2, video.videoHeight*0.2);
-        select = 3;
-        active = 1;
-    });
-
     /* UPLOAD SECTION */
 
     function drawSendXhr(canv) {
@@ -186,8 +187,8 @@ if (isset($_SESSION['id']))
     // Custom upload
 
     document.getElementById("upload").addEventListener('change', function() {
-        if (typeof(this.files[0].name) != null && typeof(select) != null && select > 0) {
-        alert(this.files[0].name);
+        if (this.files[0] != null && select != null && select > 0 &&
+            (this.files[0].name.split('.').pop() === "jpg" || this.files[0].name.split('.').pop() === "png")) {
 
         var fileReader = new FileReader();
         
@@ -208,10 +209,7 @@ if (isset($_SESSION['id']))
             img.src = fileReader.result;
         };
         fileReader.readAsDataURL(this.files[0]);
-        alert('Image upload avec succès.');
       }
-      else
-          alert('Fichier invalide / aucun filtre selectionné. Merci de bien vouloir réessayer avec une image png valide et un filtre actif.');
     });
 
 

@@ -136,15 +136,10 @@ button:hover {
 	[class*="col-"] {
     width:100%;}
 	button {
-		width:10vh;
+        width: 100%;
+        align-content: center;
 	}
-	.actbtn {
-		padding-left:41%;
-	}
-	.delogbtn {
-	padding-left:37%;
-	}
-	.takebtn {
-		padding-left:30%;
-	}
+    img {
+        width:300%;
+    }
 }

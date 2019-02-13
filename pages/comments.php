@@ -134,8 +134,7 @@ if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
             if (typeof isliked != null && isliked) {
                 document.getElementById("btn").innerHTML = "Je n'aime plus"; }
             else {
-                document.getElementById("btn").innerHTML = "J'aime";
-            console.log('ok');}
+                document.getElementById("btn").innerHTML = "J'aime";}
 
             function getXMLHttpRequest() {
                     var xhr = null;
@@ -164,12 +163,13 @@ if (isset($_GET['id']) && isOk($_GET['id'], $db)) {
                 }
             }
                 document.getElementById("submit").addEventListener("click", function() {
+                    if (document.getElementById("content").value !== "") {
                     var xhr = getXMLHttpRequest();
                     xhr.open("POST", "../scripts/comment.php", true);
                     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                     xhr.send("content=" + document.getElementById("content").value + "&img=" + img);
                     sleep(50);
-                    location.reload(true);
+                    location.reload(true); }
                 });
 
 

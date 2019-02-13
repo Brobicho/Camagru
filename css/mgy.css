@@ -38,9 +38,9 @@ button {
     color: black;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 1.5vmax;
-    display: flex;
+    display: block;
+    margin-left: -20%;
 }
 
 button:hover {
@@ -112,9 +112,18 @@ button:hover {
     width: 10%;
     font-size: 1.5vmin;
     text-align: center;
+    border: outset lightgrey 0.2vmax;
     padding-top: 1%;
     padding-bottom: 1%;
+    font-family: Arial;
 }
+
+label:hover {
+    background-color: white;
+    color:grey;
+    border:inset white 0.2vmax;
+}
+
 
 .upload {
     display: none;
@@ -159,7 +168,7 @@ button:hover {
     font-family: "Snell Roundhand";
     font-size: 1vmax;
     width: 20%;
-    height: 50;
+    height: 50%;
     margin-top: 8%;
     margin-left: 7%;
     position: absolute;
@@ -170,4 +179,19 @@ button:hover {
     padding-bottom: 18%;
     position: absolute;
     background-color: darkgrey;
+}
+
+@media screen and (max-width:775px) {
+    .legend {
+        margin-left: -1%;
+        margin-top: 5%;
+        width: 30%;
+    }
+    button {
+        width: 200%;
+        font-size: 50%;
+    }
+    .snap {
+        padding-right: 10%;
+    }
 }

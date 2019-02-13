@@ -20,7 +20,7 @@
         echo '<script>document.getElementById("css").href="css/main.css"</script>';
         return 0; }
     else
-         echo '<script>document.getElementById("css").href="css/loggedempty.css"</script>';
+         echo '<script>document.getElementById("css").href="css/empty.css"</script>';
     return (1);
 }
 ?>
@@ -51,7 +51,7 @@
 
 <?php } else { ?>
 <div class="row">
-<div class="col-10">
+<div class="col-9">
 </div>
 <div class="col-2 log">
     <form action="pages/account.php">
