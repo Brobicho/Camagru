@@ -1,0 +1,53 @@
+img {
+    width:30%;
+    display: inline-block;
+    margin-top: 1%;
+    margin-left: 0.2%;
+    border: solid grey;
+}
+
+#btn {
+    position: absolute;
+    margin-left: -20%;
+    margin-top: 15.5%;
+    width: 10%;
+    background-color: white;
+    border: outset lightgrey 0.2vmax;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#btn:hover {
+    background-color: white;
+    color:grey;
+    border:inset white 0.2vmax;
+}
+
+@media only screen and (max-width: 1000px) {
+    #btn {
+        min-width: 60px;
+        min-font-size: 0.3vh;
+        font-size: 0.7vh;
+        margin-left: -20%;
+        margin-top: 15%;
+    }
+
+}
+
+.delog {
+    background-color: white;
+    border: outset lightgrey 0.2vmax;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vmax;
+}
+
+.delog:hover {
+    background-color: white;
+    color:grey;
+    border:inset white 0.2vmax;
+}

@@ -1,0 +1,23 @@
+img {
+    display: flex;
+}
+
+button {
+    background-color: white;
+    border: outset lightgrey 0.2vmax;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1vmax;
+}
+
+button:hover {
+    background-color: white;
+    color:grey;
+    border:inset white 0.2vmax;
+}
+
+return {
+    margin-bot:10vmax;
+}
