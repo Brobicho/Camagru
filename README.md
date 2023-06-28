@@ -15,4 +15,4 @@ Sujet disponible ici : https://github.com/Binary-Hackers/42_Subjects/blob/master
 * Utilisation de l'Ajax pour la gestion des requêtes
 * Prévisualisation live des filtres
 * Développé sans framework
-* Requêtes SQL préparées, non vulnérable CSS/XSS
+* Requêtes SQL préparées, non vulnérable aux injections SQL/XSS
